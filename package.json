@@ -1,0 +1,29 @@
+{
+  "name": "ludumdare47",
+  "version": "1.0.0",
+  "description": "Ludum Dare 47!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/instafluff/LudumDare47.git"
+  },
+  "keywords": [
+    "Ludum",
+    "Dare",
+    "47",
+    "Game",
+    "Jam"
+  ],
+  "author": "Instafluff",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/instafluff/LudumDare47/issues"
+  },
+  "homepage": "https://github.com/instafluff/LudumDare47#readme",
+  "dependencies": {
+    "webwebweb": "^1.4.0"
+  }
+}

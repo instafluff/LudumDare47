@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<title>Ludum Dare 47 Title Pending</title>
+		<script src="web/game.js"></script>
+	</head>
+	<body>
+		LUDUM DARE 47 HYPE
+		<script>
+		let player = {
+			"type": "dog",
+			"stats": {
+				"cute": 0,
+				"energetic": 0,
+				"fluffy": 0,
+				"happy": 0,
+				"confident": 0,
+				"relaxed": 0,
+				"playful": 0,
+			}
+		};
+
+		let traits = createVisitor();
+		let visitor_basestats = calculateVisitorStats( traits );
+		console.log( traits, visitor_basestats );
+		console.log( "STATS:", statsScore( visitor_basestats, player.stats ) );
+		let visitor = Object.assign( {}, visitor_basestats );
+
+		for( let i = 0; i < 3; i++ ) {
+			let actions = getActions( player );
+			console.log( actions );
+			let actionNames = Object.keys( actions );
+			let action = actionNames[ getRandomInt( actionNames.length ) ];
+			console.log( action, actions[ action ].desc[ 0 ] );
+			player = applyAction( player, action );
+			Object.keys( player.stats ).forEach( s => {
+				console.log( s, player.stats[ s ] );
+			});
+
+			// console.log( player );
+			console.log( "STATS:", statsScore( visitor, player.stats ) );
+		}
+		console.log( visitor, player );
+		</script>
+	</body>
+</html>
