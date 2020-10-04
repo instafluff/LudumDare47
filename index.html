@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<title>Ludum Dare 47 Title Pending</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.0/howler.min.js" integrity="sha512-ALoawPS0JxHQ+8dGL7htZIlVNRaE/SN9gHD4G8pJJTi9H4BQ/3PjdvhggSGR34g00mvTPFkxQuveQUsJA5664Q==" crossorigin="anonymous"></script>
 		<script src="web/game.js"></script>
 		<script src="web/sentences.js"></script>
 	</head>
@@ -10,6 +11,16 @@
 		<button id="option_2" onclick="doAction(1)">Option 2</button>
 		<button id="option_3" onclick="doAction(2)">Option 3</button>
 		<script>
+		let music = new Howl({
+		  src: [ 'web/LD47-Mainthemev3.mp3' ],
+		  autoplay: true,
+		  loop: true,
+		  volume: 0.35,
+		  onend: function() {
+		    console.log('Finished!');
+		  }
+		});
+		music.play();
 		function showText( text ) {
 			document.getElementById( "text" ).innerText = text;
 		}
