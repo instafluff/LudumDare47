@@ -1,3 +1,5 @@
+const NewDay = [ "It's a fresh new day! The animal shelter is opening up for visitors" ];
+
 const Introductions = {
     "male_child": [ "A little boy walks into the animal shelter." ],
     "male_older": [ "An older gentleman walks into the animal shelter." ],
@@ -53,7 +55,7 @@ const Descriptions = {
         "busy": [ "She's talking to someone on the phone while she looks around.", "I wonder if she'll have time for me if I'm adopted." ],
         "leisure": [ "Looks like she's got a lot of time on her hands. She might hang around here for hours." ],
         "sporadic": [ "I think she's here because she's got some free time today." ],
-        "fluffy": [ "She's looking at all the fluffy animals." ],
+        "fluffy": [ "She's looking at all the fluffy animals.", "\"IT'S SO FLUFFY I'M GONNA DIE!\"" ],
         "smooth": [ "She's looking at all the hair-less animals." ],
         "outdoorsy": [ "Looks like she might've gone camping recently." ],
         "indoorsy": [ "She's carrying a book to read." ],
