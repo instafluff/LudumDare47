@@ -2,10 +2,17 @@
 	<head>
 		<title>Ludum Dare 47 Title Pending</title>
 		<script src="web/game.js"></script>
+		<script src="web/sentences.js"></script>
 	</head>
 	<body>
-		LUDUM DARE 47 HYPE
+		<h1 id="text"></h1>
+		<button id="option_1" onclick="doAction(0)">Option 1</button>
+		<button id="option_2" onclick="doAction(1)">Option 2</button>
+		<button id="option_3" onclick="doAction(2)">Option 3</button>
 		<script>
+		function showText( text ) {
+			document.getElementById( "text" ).innerText = text;
+		}
 		let player = {
 			"type": "dog",
 			"stats": {
@@ -18,6 +25,11 @@
 				"playful": 0,
 			}
 		};
+		let actionOptions = [];
+		let previousScore = 0, totalScore = 0, round = 0;
+		const numRounds = 5;
+
+		// TODO: randomize player stats
 
 		console.log( Object.keys( VisitorTraits ).map( x => VisitorTraits[ x ].join( "\", \"" ) ).join( "\", \"" ) );
 
@@ -26,22 +38,102 @@
 		console.log( traits, visitor_basestats );
 		console.log( "STATS:", statsScore( visitor_basestats, player.stats ) );
 		let visitor = Object.assign( {}, visitor_basestats );
+		console.log( `${traits[ 0 ]}_${traits[ 1 ]}` );
 
-		for( let i = 0; i < 3; i++ ) {
+		let intros = Introductions[ `${traits[ 0 ]}_${traits[ 1 ]}` ];
+		showText( intros[ getRandomInt( intros.length ) ] );
+		setTimeout( () => {
+			let desc = getRandomVisitorDescription();
+			showText( desc );
+		}, 5000 );
+		setTimeout( () => {
+			let desc = getRandomVisitorDescription();
+			showText( desc );
+		}, 15000 );
+		setTimeout( () => {
+			let desc = getRandomVisitorDescription();
+			showText( desc );
+		}, 30000 );
+		setupRound();
+		//
+		// for( let i = 0; i < 3; i++ ) {
+		// 	let actions = getActions( player );
+		// 	console.log( actions );
+		// 	let actionNames = Object.keys( actions );
+		// 	let action = actionNames[ getRandomInt( actionNames.length ) ];
+		// 	console.log( action, actions[ action ].desc[ 0 ] );
+		// 	player = applyAction( player, action );
+		// 	// Object.keys( player.stats ).forEach( s => {
+		// 	// 	console.log( s, player.stats[ s ] );
+		// 	// });
+		//
+		// 	// console.log( player );
+		// 	console.log( "STATS:", statsScore( visitor, player.stats ) );
+		// }
+		console.log( visitor, player );
+
+		function getRandomVisitorDescription() {
+			let otherTraits = traits.slice( 1 );
+			let randomTrait = otherTraits[ getRandomInt( otherTraits.length ) ];
+			let descriptions = Descriptions[ traits[ 0 ] ][ randomTrait ];
+			return descriptions[ getRandomInt( descriptions.length ) ];
+		}
+
+		function doAction( index ) {
+			player = applyAction( player, actionOptions[ index ] );
+			let score = statsScore( visitor, player.stats );
+			let prevTotal = totalScore;
+			totalScore += score;
+			const goalTotalScore = numRounds * 4;
+			let reactions = Reactions[ traits[ 0 ] ];
+			console.log( round, numRounds, previousScore, score, reactions );
+			if( round >= numRounds ) {
+				// Final round!
+				if( totalScore >= goalTotalScore ) {
+					// Adopted! YAY!
+					showText( reactions.adopted[ getRandomInt( reactions.adopted.length ) ] );
+					setTimeout( () => {
+						showText( Celebration[ getRandomInt( Celebration.length ) ] );
+					}, 5000 );
+				}
+				else {
+					// Not adopted... next visitor!
+					showText( reactions.denied[ getRandomInt( reactions.denied.length ) ] );
+					setTimeout( () => {
+						showText( Encouragement[ getRandomInt( Encouragement.length ) ] );
+					}, 5000 );
+				}
+			}
+			else {
+				if( score < previousScore ) {
+					showText( reactions.disappointed[ getRandomInt( reactions.disappointed.length ) ] );
+				}
+				else if( score === previousScore ) {
+					showText( reactions.neutral[ getRandomInt( reactions.neutral.length ) ] );
+				}
+				else if( score < previousScore + 1 ) {
+					showText( reactions.interested[ getRandomInt( reactions.interested.length ) ] );
+				}
+				else {
+					showText( reactions.veryinterested[ getRandomInt( reactions.veryinterested.length ) ] );
+				}
+				setupRound();
+			}
+			console.log( "STATS:", score );
+			previousScore = score;
+		}
+
+		function setupRound() {
+			round++;
 			let actions = getActions( player );
 			console.log( actions );
 			let actionNames = Object.keys( actions );
-			let action = actionNames[ getRandomInt( actionNames.length ) ];
-			console.log( action, actions[ action ].desc[ 0 ] );
-			player = applyAction( player, action );
-			// Object.keys( player.stats ).forEach( s => {
-			// 	console.log( s, player.stats[ s ] );
-			// });
-
-			// console.log( player );
-			console.log( "STATS:", statsScore( visitor, player.stats ) );
+			shuffleArray( actionNames );
+			for( let i = 0; i < 3; i++ ) {
+				document.getElementById( `option_${i+1}` ).innerText = actions[ actionNames[ i ] ].name;
+			}
+			actionOptions = actionNames.slice( 0, 3 );
 		}
-		console.log( visitor, player );
 		</script>
 	</body>
 </html>

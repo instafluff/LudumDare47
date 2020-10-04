@@ -3,13 +3,16 @@
 // (づ｡◕‿‿◕｡)づ
 // (ง'̀-'́)ง
 // https://textfac.es/ https://lingojam.com/CursedText
+//
+// TITLE IDEARS:
+// "Quest for the Perfect Home"
 
-const AllTraits = [ "male", "female", "neither", "child", "older", "family", "nice", "rude", "hipster", "dog-lover", "cat-lover", "boomer", "lonely", "easily-impressed", "rich", "poor", "mid-income", "busy", "leisure", "sporadic", "fluffy", "smooth", "outdoorsy", "indoorsy", "exercise", "couchpotato", "vampire" ];
+const AllTraits = [ "male", "female", "neither", "child", "older", "family", "nice", "rude", "hipster", "dog-lover", "cat-lover", "lonely", "easily-impressed", "rich", "poor", "mid-income", "busy", "leisure", "sporadic", "fluffy", "smooth", "outdoorsy", "indoorsy", "exercise", "couchpotato", "vampire" ];
 
 const VisitorTraits = {
 	"gender": [ "male", "female", "neither" ],
 	"type": [ "child", "older", "family" ], // teen
-	"personality": [ "nice", "rude", "hipster", "dog-lover", "cat-lover", "boomer", "lonely", "easily-impressed" ],
+	"personality": [ "nice", "rude", "hipster", "dog-lover", "cat-lover", "lonely", "easily-impressed" ],
 	"affluence": [ "rich", "poor", "mid-income" ],
 	"schedule": [ "busy", "leisure", "sporadic" ],
 	"preference": [ "fluffy", "smooth" ],
@@ -116,15 +119,15 @@ const TraitStats = {
 		"relaxed": -1,
 		"playful": 0,
 	},
-	"boomer": {
-		"cute": 0,
-		"energetic": -1,
-		"fluffy": 0,
-		"happy": -1,
-		"confident": 1,
-		"relaxed": 0,
-		"playful": 0,
-	},
+	// "boomer": {
+	// 	"cute": 0,
+	// 	"energetic": -1,
+	// 	"fluffy": 0,
+	// 	"happy": -1,
+	// 	"confident": 1,
+	// 	"relaxed": 0,
+	// 	"playful": 0,
+	// },
 	"lonely": {
 		"cute": 1,
 		"energetic": 0,
@@ -433,4 +436,11 @@ function statsScore( A, B ) {
 
 function getRandomInt( num ) {
 	return Math.floor( num * Math.random() );
+}
+
+function shuffleArray( array ) {
+    for( let i = array.length - 1; i > 0; i-- ) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
 }
