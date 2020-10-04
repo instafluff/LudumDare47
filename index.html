@@ -61,7 +61,7 @@
 		  src: [ 'web/assets/LD47-Mainthemev3.mp3' ],
 		  autoplay: false,
 		  loop: true,
-		  volume: 0.15,
+		  volume: 0.10,
 		  onplay: function() {
 			  t1 = new Date().getTime();
 		  },
@@ -69,13 +69,37 @@
 			  console.log('Finished!');
 		  }
 		});
-		const beat = 60000 / 168;
-		const trackOffset = beat*2;
+		let beat = 60000/168;
+		let beatBars = [2,14,26,36,48];
+		let trackOffset = beat*2;
 		music.play();
+		setTimeout( () => {
+			playWinMusic();
+		}, 60000 );
 		function playWinMusic() {
 			let diff = new Date().getTime() - t1;
-			let beats = (diff - trackOffset)/beat;
-			let waitTime = Math.round((((beats - (beats % 8))/8 + 1)*8-beats) * beat);
+			  let beats = Math.round((diff - trackOffset)/beat);
+			  let waitTime = 0;
+			  if (beats < 48) {
+			  	let currentBeatBar = 2;
+			  	for (i=3; i >= 0; i--) {
+			    	if (beats > beatBars[i]) {
+			        currentBeatBar = beatBars[i+1];
+			        break;
+			      }
+			    }
+			    console.log(currentBeatBar);
+			    waitTime = Math.round((currentBeatBar-beats)*beat);
+
+			  } else if (beats < 388) {
+			  	beats = Math.round((diff - 50*beat)/beat);
+			    console.log(beats);
+			  	waitTime = Math.round((((beats - (beats % 8))/8 + 1)*8-beats) * beat);
+			  } else {
+			  	beats = Math.round((diff - 380*beat)/beat);
+			    console.log(beats);
+			  	waitTime = Math.round((((beats - (beats % 8))/8 + 1)*8-beats) * beat);
+			  }
 
 			console.log( "Waiting for " + waitTime + " miliseconds" );
 			setTimeout( () => {
