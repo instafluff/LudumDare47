@@ -4,9 +4,11 @@
 // (ง'̀-'́)ง
 // https://textfac.es/ https://lingojam.com/CursedText
 
+const AllTraits = [ "male", "female", "neither", "child", "older", "family", "nice", "rude", "hipster", "dog-lover", "cat-lover", "boomer", "lonely", "easily-impressed", "rich", "poor", "mid-income", "busy", "leisure", "sporadic", "fluffy", "smooth", "outdoorsy", "indoorsy", "exercise", "couchpotato", "vampire" ];
+
 const VisitorTraits = {
 	"gender": [ "male", "female", "neither" ],
-	"type": [ "child", "older", "family" ],
+	"type": [ "child", "older", "family" ], // teen
 	"personality": [ "nice", "rude", "hipster", "dog-lover", "cat-lover", "boomer", "lonely", "easily-impressed" ],
 	"affluence": [ "rich", "poor", "mid-income" ],
 	"schedule": [ "busy", "leisure", "sporadic" ],
@@ -424,7 +426,7 @@ function applyAction( player, actionName ) {
 function statsScore( A, B ) {
 	return StatTypes.reduce( ( total, stat ) => {
 		let sum = total + ( Math.min( 1, Math.max( -1, A[ stat ] ) ) === Math.min( 1, Math.max( -1, B[ stat ] ) ) ? 1 : 0 );
-		console.log( stat, A[ stat ], "vs", B[ stat ], "=>", sum );
+		// console.log( stat, A[ stat ], "vs", B[ stat ], "=>", sum );
 		return sum;
 	}, 0 );
 }

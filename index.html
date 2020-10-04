@@ -19,6 +19,8 @@
 			}
 		};
 
+		console.log( Object.keys( VisitorTraits ).map( x => VisitorTraits[ x ].join( "\", \"" ) ).join( "\", \"" ) );
+
 		let traits = createVisitor();
 		let visitor_basestats = calculateVisitorStats( traits );
 		console.log( traits, visitor_basestats );
@@ -32,9 +34,9 @@
 			let action = actionNames[ getRandomInt( actionNames.length ) ];
 			console.log( action, actions[ action ].desc[ 0 ] );
 			player = applyAction( player, action );
-			Object.keys( player.stats ).forEach( s => {
-				console.log( s, player.stats[ s ] );
-			});
+			// Object.keys( player.stats ).forEach( s => {
+			// 	console.log( s, player.stats[ s ] );
+			// });
 
 			// console.log( player );
 			console.log( "STATS:", statsScore( visitor, player.stats ) );
