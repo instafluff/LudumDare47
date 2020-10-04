@@ -11,16 +11,79 @@
 		<button id="option_2" onclick="doAction(1)">Option 2</button>
 		<button id="option_3" onclick="doAction(2)">Option 3</button>
 		<script>
+		var t1 = new Date().getTime();
+		let sfx_adopted = new Howl({
+			src: [ `web/assets/adopted.mp3` ],
+			autoplay: false,
+			loop: false,
+			volume: 0.5
+		});
+		let sfx_denied = new Howl({
+			src: [ `web/assets/denied.mp3` ],
+			autoplay: false,
+			loop: false,
+			volume: 0.5
+		});
+		let sfx_disappoint = new Howl({
+			src: [ `web/assets/disappoint.mp3` ],
+			autoplay: false,
+			loop: false,
+			volume: 0.5
+		});
+		let sfx_neutral = new Howl({
+			src: [ `web/assets/neutral.mp3` ],
+			autoplay: false,
+			loop: false,
+			volume: 0.5
+		});
+		let sfx_interested = new Howl({
+			src: [ `web/assets/interested.mp3` ],
+			autoplay: false,
+			loop: false,
+			volume: 0.5
+		});
+		let sfx_veryinterested = new Howl({
+			src: [ `web/assets/veryinterested.mp3` ],
+			autoplay: false,
+			loop: false,
+			volume: 0.5
+		});
+		let winMusic = new Howl({
+			src: [ `web/assets/LD47_-_win.mp3` ],
+			autoplay: false,
+			loop: false,
+			volume: 0.25,
+			onend: function() {
+				console.log( "end win music" );
+			}
+		});
 		let music = new Howl({
-		  src: [ 'web/LD47-Mainthemev3.mp3' ],
-		  autoplay: true,
+		  src: [ 'web/assets/LD47-Mainthemev3.mp3' ],
+		  autoplay: false,
 		  loop: true,
 		  volume: 0.25,
+		  onplay: function() {
+			  t1 = new Date().getTime();
+		  },
 		  onend: function() {
-		    console.log('Finished!');
+			  console.log('Finished!');
 		  }
 		});
+		const beat = 60000 / 168;
+		const trackOffset = beat*2;
 		music.play();
+		function playWinMusic() {
+			let diff = new Date().getTime() - t1;
+			let beats = (diff - trackOffset)/beat;
+			let waitTime = Math.round((((beats - (beats % 8))/8 + 1)*8-beats) * beat);
+
+			console.log( "Waiting for " + waitTime + " miliseconds" );
+			setTimeout( () => {
+				console.log( "NOW!" );
+				// music.stop();
+				sfx_adopted.play();
+			}, waitTime );
+		}
 		function showText( text ) {
 			document.getElementById( "text" ).innerText = text;
 		}
@@ -112,6 +175,7 @@
 				// Final round!
 				if( totalScore >= goalTotalScore ) {
 					// Adopted! YAY!
+					playWinMusic();
 					showText( reactions.adopted[ getRandomInt( reactions.adopted.length ) ] );
 					setTimeout( () => {
 						showText( Celebration[ getRandomInt( Celebration.length ) ] );
@@ -119,6 +183,7 @@
 				}
 				else {
 					// Not adopted... next visitor!
+					sfx_denied.play();
 					showText( reactions.denied[ getRandomInt( reactions.denied.length ) ] );
 					setTimeout( () => {
 						showText( Encouragement[ getRandomInt( Encouragement.length ) ] );
@@ -130,15 +195,19 @@
 			}
 			else {
 				if( score < previousScore ) {
+					sfx_disappoint.play();
 					showText( reactions.disappointed[ getRandomInt( reactions.disappointed.length ) ] );
 				}
 				else if( score === previousScore ) {
+					sfx_neutral.play();
 					showText( reactions.neutral[ getRandomInt( reactions.neutral.length ) ] );
 				}
-				else if( score < previousScore + 1 ) {
+				else if( round < 3 || score < previousScore + 1 ) {
+					sfx_interested.play();
 					showText( reactions.interested[ getRandomInt( reactions.interested.length ) ] );
 				}
 				else {
+					sfx_veryinterested.play();
 					showText( reactions.veryinterested[ getRandomInt( reactions.veryinterested.length ) ] );
 				}
 				setupRound();
