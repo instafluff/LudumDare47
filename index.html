@@ -352,6 +352,37 @@
 			return descriptions[ getRandomInt( descriptions.length ) ];
 		}
 
+		async function doCelebration() {
+			showText( "Congratulations! You're going to a new home!", 1000, 5000, "Chewy", color_narrator );
+
+			showText( "You are lifted gently into the backseat of the car.", 7000, 5000, "Chewy", color_narrator );
+
+			showText( "Is this what it's like going for a ride?", 10000, 5000, "Chewy", color_player );
+			showText( "Will it be warm there?", 12000, 5000, "Chewy", color_player );
+			showText( "Will I have my own bed?", 13500, 5000, "Chewy", color_player );
+			showText( "I bet it's so cozy there..", 15000, 5000, "Chewy", color_player );
+
+			showText( "Hey little one! I have something for you...", 22000, 4000, "Balsamiq Sans", color_visitor );
+			showText( "...A treat? Just for me??", 23500, 5000, "Chewy", color_player );
+
+			showText( "The car comes to a stop.", 30000, 5000, "Chewy", color_narrator );
+			showText( "All righty, we're here!", 34000, 5000, "Balsamiq Sans", color_visitor );
+			showText( "Let's go inside. You're going to love it.", 38000, 5000, "Balsamiq Sans", color_visitor );
+
+			showText( "You see a fresh new pet bed right next to a couch. With toys!", 42000, 5000, "Chewy", color_narrator );
+			showText( "I... This has to be a dream... I want to be here fur-ever.", 47000, 5000, "Chewy", color_player );
+			showText( "Welcome to your new home, little one!", 50000, 5000, "Balsamiq Sans", color_visitor );
+			showText( "You can stay here, right next to me...", 55000, 8000, "Balsamiq Sans", color_visitor );
+
+			showText( "Thank you fur playing our game.", 65000, 10000, "Chewy", color_narrator );
+			showText( "Many pets around the world are looking for love!", 70000, 10000, "Chewy", color_visitor );
+			showText( "Please check your local shelter and consider adopting a pet <3", 74000, 10000, "Chewy", color_visitor );
+			showText( "With love,", 78000, 10000, "Chewy", color_narrator );
+			showText( "Instafluff, Patrik, and Maaya", 80000, 10000, "Chewy", color_player );
+
+			showText( "Homepick, A Pet Text Adventure. Ludum Dare 47", 91000, 10000, "Chewy", color_narrator );
+		}
+
 		async function doAction( index ) {
 			hideButtons();
 			if( titleTimer ) {
@@ -382,6 +413,8 @@
 					showText( narrations.adopted[ getRandomInt( narrations.adopted.length ) ], 0, 5000, "Chewy", color_narrator );
 					showText( reactions.adopted[ getRandomInt( reactions.adopted.length ) ], 2000, 5000, "Balsamiq Sans", color_visitor );
 					showText( Celebration[ getRandomInt( Celebration.length ) ], 6000, 5000, "Chewy", color_player );
+					await wait( 11000 );
+					doCelebration();
 				}
 				else {
 					// Not adopted... next visitor!
