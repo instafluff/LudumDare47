@@ -395,21 +395,25 @@
 			else {
 				if( score < previousScore ) {
 					// sfx_disappoint.play();
+					bark();
 					showText( narrations.disappointed[ getRandomInt( narrations.disappointed.length ) ], 0, 5000, "Chewy", color_narrator );
 					showText( reactions.disappointed[ getRandomInt( reactions.disappointed.length ) ], 2000, 5000, "Balsamiq Sans", color_visitor );
 				}
 				else if( score === previousScore ) {
 					// sfx_neutral.play();
+					bark();
 					showText( narrations.neutral[ getRandomInt( narrations.neutral.length ) ], 0, 5000, "Chewy", color_narrator );
 					showText( reactions.neutral[ getRandomInt( reactions.neutral.length ) ], 2000, 5000, "Balsamiq Sans", color_visitor );
 				}
 				else if( round < 3 || score < previousScore + 1 ) {
 					// sfx_interested.play();
+					bark();
 					showText( narrations.interested[ getRandomInt( narrations.interested.length ) ], 0, 5000, "Chewy", color_narrator );
 					showText( reactions.interested[ getRandomInt( reactions.interested.length ) ], 2000, 5000, "Balsamiq Sans", color_visitor );
 				}
 				else {
 					// sfx_veryinterested.play();
+					bark();
 					showText( narrations.veryinterested[ getRandomInt( narrations.veryinterested.length ) ], 0, 5000, "Chewy", color_narrator );
 					showText( reactions.veryinterested[ getRandomInt( reactions.veryinterested.length ) ], 2000, 5000, "Balsamiq Sans", color_visitor );
 				}
