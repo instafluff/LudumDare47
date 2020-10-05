@@ -11,7 +11,7 @@ body {
 	height: 30px;
 	border: none;
 	/*background: #90ADC6;*/
-	background: #EBEE80;
+	background: #FAD02C;
 	cursor: pointer;
 }
 #volume-control:hover {
@@ -38,9 +38,9 @@ body {
 	border: none;
 	padding: 25px 50px;
 	margin-right: 10px;
-	font-family: Balsamiq Sans;
-	font-size: 20px;
-	color: #131313;
+	font-family: "Chewy";
+	font-size: 24px;
+	color: #000000;
 	cursor: pointer;
 	transition: all 0.1s;
 	border-radius: 8px;
