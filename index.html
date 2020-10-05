@@ -8,7 +8,6 @@
 	</head>
 	<body>
 		<div id="unicorn-display"></div>
-		<h1 id="text"></h1>
 		<button id="option_1" onclick="doAction(0)">Option 1</button>
 		<button id="option_2" onclick="doAction(1)">Option 2</button>
 		<button id="option_3" onclick="doAction(2)">Option 3</button>
@@ -149,21 +148,22 @@
 			  }
 
 			// console.log( "Waiting for " + waitTime + " miliseconds" );
-			setTimeout( () => {
-				// console.log( "NOW!" );
-				// music.stop();
+			// setTimeout( () => {
+			// 	// console.log( "NOW!" );
+			// 	// music.stop();
 				sfx_adopted.play();
-			}, waitTime );
+			// }, waitTime );
 		}
 
 		let textCounter = 0;
+		let textYRefCount = 0;
+		let textYOffset = 0;
 		async function showText( text, delay = 0, time = 5000, font = "Balsamiq Sans", color = "#000000", anim = "" ) {
-			// document.getElementById( "text" ).innerText = text;
 			await wait( delay );
 			textCounter++;
 			let label = "text_" + textCounter;
 			let xPos = getRandomInt( 1280 - 80 ) + 40;
-			let yPos = getRandomInt( 720 - 80 ) + 40;
+			let yPos = ( getRandomInt( 720 - 80 ) + 40 );
 			let element = Unicorn.AddText( label, text, xPos, yPos, {
 				fontFamily: font,
 				fontSize: 36,
@@ -171,12 +171,25 @@
 				fill: color
 			} );
 			element.anchor.set( 0.5 );
-			console.log( element );
+			// console.log( element );
 			xPos = getRandomInt( 1280 - element.width - 80 ) + 40 + element.width / 2;
 			yPos = getRandomInt( 720 - element.height - 80 ) + 40 + element.height / 2;
+			if( textYRefCount === 0 ) {
+				textYOffset = yPos;
+			}
+			else {
+				textYOffset += 100;
+				if( textYOffset > 720 - element.height - 40 ) {
+					textYOffset -= 720 - element.height - 80;
+				}
+				yPos = textYOffset;
+			}
+			// console.log( textYRefCount, yPos );
+			textYRefCount++;
 			element.x = xPos;
 			element.y = yPos;
 			setTimeout( () => {
+				textYRefCount--;
 				Unicorn.RemoveText( label );
 			}, time );
 		}
@@ -285,7 +298,7 @@
 				}
 				else {
 					// Not adopted... next visitor!
-					sfx_denied.play();
+					// sfx_denied.play();
 					showText( narrations.denied[ getRandomInt( narrations.denied.length ) ], 0, 5000, "Balsamiq Sans", color_narrator );
 					showText( reactions.denied[ getRandomInt( reactions.denied.length ) ], 2000, 5000, "Grandstander", color_visitor );
 					showText( Encouragement[ getRandomInt( Encouragement.length ) ], 7000, 5000, "Balsamiq Sans", color_player );
@@ -295,22 +308,22 @@
 			}
 			else {
 				if( score < previousScore ) {
-					sfx_disappoint.play();
+					// sfx_disappoint.play();
 					showText( narrations.disappointed[ getRandomInt( narrations.disappointed.length ) ], 0, 5000, "Balsamiq Sans", color_narrator );
 					showText( reactions.disappointed[ getRandomInt( reactions.disappointed.length ) ], 2000, 5000, "Grandstander", color_visitor );
 				}
 				else if( score === previousScore ) {
-					sfx_neutral.play();
+					// sfx_neutral.play();
 					showText( narrations.neutral[ getRandomInt( narrations.neutral.length ) ], 0, 5000, "Balsamiq Sans", color_narrator );
 					showText( reactions.neutral[ getRandomInt( reactions.neutral.length ) ], 2000, 5000, "Grandstander", color_visitor );
 				}
 				else if( round < 3 || score < previousScore + 1 ) {
-					sfx_interested.play();
+					// sfx_interested.play();
 					showText( narrations.interested[ getRandomInt( narrations.interested.length ) ], 0, 5000, "Balsamiq Sans", color_narrator );
 					showText( reactions.interested[ getRandomInt( reactions.interested.length ) ], 2000, 5000, "Grandstander", color_visitor );
 				}
 				else {
-					sfx_veryinterested.play();
+					// sfx_veryinterested.play();
 					showText( narrations.veryinterested[ getRandomInt( narrations.veryinterested.length ) ], 0, 5000, "Balsamiq Sans", color_narrator );
 					showText( reactions.veryinterested[ getRandomInt( reactions.veryinterested.length ) ], 2000, 5000, "Grandstander", color_visitor );
 				}
