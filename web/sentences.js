@@ -1,22 +1,23 @@
 const NewDay = [ "It's a fresh new day! The animal shelter is opening up for visitors" ];
 
 const Introductions = {
-    "male_child": [ "A little boy walks into the animal shelter." ],
-    "male_older": [ "An older gentleman walks into the animal shelter." ],
-    "male_family": [ "A man walks into the animal shelter with two tiny humans." ],
-    "female_child": [ "A little girl walks into the animal shelter." ],
-    "female_older": [ "An older lady walks into the animal shelter." ],
-    "female_family": [ "A woman walks into the animal shelter with two tiny humans." ],
+    "male_child": [ "A little boy walks into the animal shelter.", "A young boy walks into the animal shelter." ],
+    "male_older": [ "An older gentleman walks into the animal shelter.", "An elderly gentleman walks into the animal shelter." ],
+    "male_family": [ "A man walks into the animal shelter with two tiny humans.", "An adult man walks into the animal shelter with two youthful people." ],
+    "female_child": [ "A little girl walks into the animal shelter.", "A young girl walks into the animal shelter." ],
+    "female_older": [ "An older lady walks into the animal shelter.", "An elderly woman walks into the animal shelter." ],
+    "female_family": [ "A woman walks into the animal shelter with two tiny humans.", "A woman walks into the animal shelter with two, much younger people." ],
     "neither_child": [ "A young child walks into the animal shelter." ],
-    "neither_older": [ "An older person walks into the animal shelter." ],
-    "neither_family": [ "Someone walks into the animal shelter with two tiny humans." ],
+    "neither_older": [ "An older person walks into the animal shelter.", "An elderly person walks into the animal shelter." ],
+    "neither_family": [ "Someone walks into the animal shelter with two tiny humans.", "Someone walks into the animal shelter with two, much younger people." ],
 };
 
 const Descriptions = {
     "male": {
-        "child": [ "He tugs at a big human's clothes and says, \"Dad, look at this one!\"" ],
-        "older": [ "He walks around with a cane" ],
-        "family": [ "They look around the animal shelter together." ],
+        "child": [ "He tugs at a big human's clothes and says, \"Dad, look at this one!\"",
+            "He sqeezes a toy and says, \"Dad, look at this one!\"" ],
+        "older": [ "He walks around with a cane"],
+        "family": [ "They look around the animal shelter together."],
         "nice": [ "He asks politely, \"I'm looking for a good companion to tag along with me. Who's your nicest animal buddy here?\"" ],
         "rude": [ "He yells out, \"Can I get some help around here?\"" ],
         "hipster": [ "He's dressed a little funny with bright hair colors!" ],
