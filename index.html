@@ -29,6 +29,7 @@
 		<script>
 		const params = new URLSearchParams( location.search );
 		const fonts = [
+			"Indie Flower", // Title
 			"Permanent Marker", // announcements!
 			"Balsamiq Sans", // pet
 			// "Grandstander", // happy and cute, child
@@ -223,7 +224,7 @@
 						textFadeOuts.push( element );
 						setTimeout( () => {
 							Unicorn.RemoveText( label );
-						}, 1500 );
+						}, 3000 );
 					}
 					break;
 				default:
@@ -256,7 +257,7 @@
 		let traits = null;
 		let visitor_basestats;
 		let visitor;
-		let titleLabel = "";
+		let titleLabel = null;
 		let titleTimer = null;
 		let lastTitleText = -1;
 
@@ -264,7 +265,7 @@
 			// TODO: randomize player stats
 
 			// Start the title screen
-			titleLabel = await showText( Title, 0, 20000, "Balsamiq Sans", color_narrator );
+			titleLabel = await showText( Title, 0, 20000, "Indie Flower", color_narrator );
 
 			titleTimer = setInterval( () => {
 				let titleText = getRandomInt( TitleTexts.length, lastTitleText );
@@ -284,10 +285,18 @@
 				if( textFadeIns[ i ].alpha < 1 ) {
 					textFadeIns[ i ].alpha += timeStep;
 				}
+				else {
+					textFadeIns.splice( i, 1 );
+					i--;
+				}
 			}
 			for( let i = 0; i < textFadeOuts.length; i++ ) {
-				if( textFadeIns[ i ].alpha > 0 ) {
-					textFadeIns[ i ].alpha -= timeStep;
+				if( textFadeOuts[ i ].alpha > 0 ) {
+					textFadeOuts[ i ].alpha -= timeStep;
+				}
+				else {
+					textFadeOuts.splice( i, 1 );
+					i--;
 				}
 			}
 		}
@@ -310,10 +319,10 @@
 			// console.log( `${traits[ 0 ]}_${traits[ 1 ]}` );
 
 			let intros = Introductions[ `${traits[ 0 ]}_${traits[ 1 ]}` ];
-			showText( intros[ getRandomInt( intros.length ) ], 0, 20000, "Chewy", color_narrator );
-			showText( getRandomVisitorDescription(), 5000, 17000, "Chewy", color_player );
-			showText( getRandomVisitorDescription(), 10000, 14000, "Chewy", color_player );
-			showText( getRandomVisitorDescription(), 15000, 11000, "Chewy", color_player );
+			showText( intros[ getRandomInt( intros.length ) ], 0, 15000, "Chewy", color_narrator );
+			showText( getRandomVisitorDescription(), 5000, 12000, "Chewy", color_player );
+			showText( getRandomVisitorDescription(), 10000, 9000, "Chewy", color_player );
+			showText( getRandomVisitorDescription(), 15000, 6000, "Chewy", color_player );
 			await wait( 20000 );
 			setupRound();
 		}
@@ -347,7 +356,7 @@
 			if( titleTimer ) {
 				// Start the game!
 				clearInterval( titleTimer );
-				titleLabel.alpha = 0;
+				textFadeOuts.push( titleLabel );
 				titleTimer = null;
 				setupNewDay();
 				return;
