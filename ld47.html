@@ -1,0 +1,476 @@
+<html>
+	<head>
+		<title>Homepick, A Pet Text Adventure - Ludum Dare 47</title>
+    <meta charset="utf-8">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.0/howler.min.js" integrity="sha512-ALoawPS0JxHQ+8dGL7htZIlVNRaE/SN9gHD4G8pJJTi9H4BQ/3PjdvhggSGR34g00mvTPFkxQuveQUsJA5664Q==" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/pinkfluffyunicorn/dist/pinkfluffyunicorn.min.js"></script>
+		<script src="web/game.js"></script>
+		<script src="web/sentences.js"></script>
+		<!-- Polish -->
+		<script src="web/game-pat.js" defer></script>
+		<script src="web/animations/lib/anime.min.js"></script>
+		<link href="web/game.css" rel="stylesheet">
+		<!-- FontAwesome -->
+		<link href="web/fontawesome/css/all.min.css" rel="stylesheet">
+		<script src="web/fontawesome/js/all.min.js"></script>
+	</head>
+	<body>
+		<button id="volume-control" type="button"><i id="volume-icon" class="fa fa-volume-down"></i></button>
+		<audio src="" id="player"></audio>
+		<div id="unicorn-display"></div>
+		<h1 id="text"></h1>
+		<div id="action-buttons-container">
+			<div id="action-buttons">
+				<button id="option_1" onclick="doAction(0)">Click</button>
+				<button id="option_2" onclick="doAction(1)">To</button>
+				<button id="option_3" onclick="doAction(2)">Start</button>
+			</div>
+		</div>
+		<script>
+		const params = new URLSearchParams( location.search );
+		const fonts = [
+			"Indie Flower", // Title
+			"Permanent Marker", // announcements!
+			"Balsamiq Sans", // pet
+			// "Grandstander", // happy and cute, child
+			// "Neucha", // shy, quotes
+			"Chewy", // fluffy pet!
+		];
+		window.WebFontConfig = {
+			google: {
+				families: fonts,
+			},
+			active() {
+				CreateGame();
+			},
+		};
+
+		/* eslint-disable */
+		// include the web-font loader script
+		(function() {
+			const wf = document.createElement('script');
+			wf.src = `${document.location.protocol === 'https:' ? 'https' : 'http'
+			}://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js`;
+			wf.type = 'text/javascript';
+			wf.async = 'true';
+			const s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(wf, s);
+		}());
+		/* eslint-enabled */
+
+		function CreateGame() {
+			Unicorn.Create( "unicorn-display", {
+				width: 1280,
+				height: 720,
+				background: params.get( "overlay" ) ? "transparent" : 0x333652,
+				// background: "transparent",
+				init: Init,
+				update: Update,
+				channel: params.get( "channel" ),
+				onCommand: OnChatCommand,
+				onChat: OnChatMessage,
+				// screenWalls: false, // Default: true
+				// wallBottom: true,
+				gravity: { x: 0, y: 0 },
+				// gravity: { x: 0, y: 2 } // Default: { x: 0, y: 1 }
+			});
+		}
+
+		var t1 = new Date().getTime();
+		let sfx_adopted = new Howl({
+			src: [ `web/assets/adopted.mp3` ],
+			autoplay: false,
+			loop: false,
+			volume: 0.5
+		});
+		let sfx_denied = new Howl({
+			src: [ `web/assets/denied.mp3` ],
+			autoplay: false,
+			loop: false,
+			volume: 0.5
+		});
+		let sfx_disappoint = new Howl({
+			src: [ `web/assets/disappoint.mp3` ],
+			autoplay: false,
+			loop: false,
+			volume: 0.5
+		});
+		let sfx_neutral = new Howl({
+			src: [ `web/assets/neutral.mp3` ],
+			autoplay: false,
+			loop: false,
+			volume: 0.5
+		});
+		let sfx_interested = new Howl({
+			src: [ `web/assets/interested.mp3` ],
+			autoplay: false,
+			loop: false,
+			volume: 0.5
+		});
+		let sfx_veryinterested = new Howl({
+			src: [ `web/assets/veryinterested.mp3` ],
+			autoplay: false,
+			loop: false,
+			volume: 0.5
+		});
+		let winMusic = new Howl({
+			src: [ `web/assets/LD47_-_win.mp3` ],
+			autoplay: false,
+			loop: false,
+			volume: 0.25,
+			onend: function() {
+				console.log( "end win music" );
+			}
+		});
+		let music = new Howl({
+		  src: [ 'web/assets/LD47-Mainthemev3.mp3' ],
+		  autoplay: false,
+		  loop: true,
+		  volume: 0.10,
+		  onplay: function() {
+			  t1 = new Date().getTime();
+		  },
+		  onend: function() {
+			  console.log('Finished!');
+		  }
+		});
+		let beat = 60000/168;
+		let beatBars = [2,14,26,36,48];
+		let trackOffset = beat*2;
+		music.play();
+		function playWinMusic() {
+			let diff = new Date().getTime() - t1;
+			  let beats = Math.round((diff - trackOffset)/beat);
+			  let waitTime = 0;
+			  if (beats < 48) {
+			  	let currentBeatBar = 2;
+			  	for (i=3; i >= 0; i--) {
+			    	if (beats > beatBars[i]) {
+			        currentBeatBar = beatBars[i+1];
+			        break;
+			      }
+			    }
+			    // console.log(currentBeatBar);
+			    waitTime = Math.round((currentBeatBar-beats)*beat);
+
+			  } else if (beats < 388) {
+			  	beats = Math.round((diff - 50*beat)/beat);
+			    // console.log(beats);
+			  	waitTime = Math.round((((beats - (beats % 8))/8 + 1)*8-beats) * beat);
+			  } else {
+			  	beats = Math.round((diff - 380*beat)/beat);
+			    // console.log(beats);
+			  	waitTime = Math.round((((beats - (beats % 8))/8 + 1)*8-beats) * beat);
+			  }
+
+			// console.log( "Waiting for " + waitTime + " miliseconds" );
+			// setTimeout( () => {
+			// 	// console.log( "NOW!" );
+			// 	// music.stop();
+				sfx_adopted.play();
+			// }, waitTime );
+		}
+
+		let textCounter = 0;
+		let textYRefCount = 0;
+		let textYOffset = 0;
+		let textFadeIns = [];
+		let textFadeOuts = [];
+		async function showText( text, delay = 0, time = 5000, font = "Chewy", color = "#000000", anim = "fade" ) {
+			await wait( delay );
+			textCounter++;
+			let label = "text_" + textCounter;
+			let xPos = getRandomInt( 1280 - 80 ) + 40;
+			let yPos = ( getRandomInt( 720 - 80 ) + 40 );
+			let element = Unicorn.AddText( label, text, xPos, yPos, {
+				fontFamily: font,
+				fontSize: 36,
+				fontWeight: "bold",
+				fill: color
+			} );
+			element.anchor.set( 0.5 );
+			switch( anim ) {
+			case "fade":
+				{
+					element.alpha = 0;
+					textFadeIns.push( element );
+				}
+				break;
+			default:
+				break;
+			}
+			// console.log( element );
+			xPos = getRandomInt( 1280 - element.width - 80 ) + 40 + element.width / 2;
+			yPos = getRandomInt( 720 - element.height - 80 - 114 ) + 40 + element.height / 2;
+			if( textYRefCount === 0 ) {
+				textYOffset = yPos;
+			}
+			else {
+				textYOffset += 100;
+				if( textYOffset > 720 - element.height - 40 - 114 ) {
+					textYOffset -= 720 - element.height - 120 - 114;
+				}
+				yPos = textYOffset;
+			}
+			// console.log( textYRefCount, yPos );
+			textYRefCount++;
+			element.x = xPos;
+			element.y = yPos;
+			setTimeout( () => {
+				textYRefCount--;
+				switch( anim ) {
+				case "fade":
+					{
+						textFadeOuts.push( element );
+						setTimeout( () => {
+							Unicorn.RemoveText( label );
+						}, 3000 );
+					}
+					break;
+				default:
+					Unicorn.RemoveText( label );
+					break;
+				}
+			}, time );
+
+			return element;
+		}
+
+		const color_narrator = "#FAD02C";
+		const color_player = "#90ADC6";
+		const color_visitor = "#E9EAEC";
+		let player = {
+			"type": "dog",
+			"stats": {
+				"cute": 0,
+				"energetic": 0,
+				"fluffy": 0,
+				"happy": 0,
+				"confident": 0,
+				"relaxed": 0,
+				"playful": 0,
+			}
+		};
+		let actionOptions = [];
+		let previousScore = 0, totalScore = 0, round = 0;
+		const numRounds = 5;
+		let traits = null;
+		let visitor_basestats;
+		let visitor;
+		let titleLabel = null;
+		let titleTimer = null;
+		let lastTitleText = -1;
+
+		async function Init() {
+			// TODO: randomize player stats
+
+			// Start the title screen
+			titleLabel = await showText( Title, 0, 20000, "Indie Flower", color_narrator );
+
+			titleTimer = setInterval( () => {
+				let titleText = getRandomInt( TitleTexts.length, lastTitleText );
+				showText( TitleTexts[ titleText ], 0, 6000, "Chewy", color_player );
+				lastTitleText = titleText;
+			}, 5000 );
+
+			await wait( 1000 );
+			showButtons();
+
+			// setupNewDay();
+		}
+
+		function Update( timestamp, timeDiffInMs ) {
+			const timeStep = timeDiffInMs / 1000;
+			for( let i = 0; i < textFadeIns.length; i++ ) {
+				if( textFadeIns[ i ].alpha < 1 ) {
+					textFadeIns[ i ].alpha += timeStep;
+				}
+				else {
+					textFadeIns.splice( i, 1 );
+					i--;
+				}
+			}
+			for( let i = 0; i < textFadeOuts.length; i++ ) {
+				if( textFadeOuts[ i ].alpha > 0 ) {
+					textFadeOuts[ i ].alpha -= timeStep;
+				}
+				else {
+					textFadeOuts.splice( i, 1 );
+					i--;
+				}
+			}
+		}
+
+		function OnChatCommand( user, command, message, flags ) {
+		}
+
+		function OnChatMessage( user, message, flags, self ) {
+		}
+
+		async function setupNewDay() {
+			previousScore = 0; totalScore = 0; round = 0;
+			showText( NewDay[ getRandomInt( NewDay.length ) ], 0, 5000, "Chewy", color_narrator );
+			await wait( 5000 );
+			traits = createVisitor();
+			visitor_basestats = calculateVisitorStats( traits );
+			// console.log( traits, visitor_basestats );
+			// console.log( "STATS:", statsScore( visitor_basestats, player.stats ) );
+			visitor = Object.assign( {}, visitor_basestats );
+			// console.log( `${traits[ 0 ]}_${traits[ 1 ]}` );
+
+			let intros = Introductions[ `${traits[ 0 ]}_${traits[ 1 ]}` ];
+			walkIn();
+			showText( intros[ getRandomInt( intros.length ) ], 0, 15000, "Chewy", color_narrator );
+			showText( getRandomVisitorDescription(), 5000, 12000, "Chewy", color_player );
+			showText( getRandomVisitorDescription(), 10000, 9000, "Chewy", color_player );
+			showText( getRandomVisitorDescription(), 15000, 6000, "Chewy", color_player );
+			await wait( 20000 );
+			setupRound();
+		}
+
+		//
+		// for( let i = 0; i < 3; i++ ) {
+		// 	let actions = getActions( player );
+		// 	console.log( actions );
+		// 	let actionNames = Object.keys( actions );
+		// 	let action = actionNames[ getRandomInt( actionNames.length ) ];
+		// 	console.log( action, actions[ action ].desc[ 0 ] );
+		// 	player = applyAction( player, action );
+		// 	// Object.keys( player.stats ).forEach( s => {
+		// 	// 	console.log( s, player.stats[ s ] );
+		// 	// });
+		//
+		// 	// console.log( player );
+		// 	console.log( "STATS:", statsScore( visitor, player.stats ) );
+		// }
+		// console.log( visitor, player );
+
+		function getRandomVisitorDescription() {
+			let otherTraits = traits.slice( 1 );
+			let randomTrait = otherTraits[ getRandomInt( otherTraits.length ) ];
+			let descriptions = Descriptions[ traits[ 0 ] ][ randomTrait ];
+			return descriptions[ getRandomInt( descriptions.length ) ];
+		}
+
+		async function doCelebration() {
+			showText( "Congratulations! You're going to a new home!", 1000, 5000, "Chewy", color_narrator );
+
+			showText( "You are lifted gently into the backseat of the car.", 7000, 5000, "Chewy", color_narrator );
+
+			showText( "Is this what it's like going for a ride?", 10000, 5000, "Chewy", color_player );
+			showText( "Will it be warm there?", 12000, 5000, "Chewy", color_player );
+			showText( "Will I have my own bed?", 13500, 5000, "Chewy", color_player );
+			showText( "I bet it's so cozy there..", 15000, 5000, "Chewy", color_player );
+
+			showText( "Hey little one! I have something for you...", 22000, 4000, "Balsamiq Sans", color_visitor );
+			showText( "...A treat? Just for me??", 23500, 5000, "Chewy", color_player );
+
+			showText( "The car comes to a stop.", 30000, 5000, "Chewy", color_narrator );
+			showText( "All righty, we're here!", 34000, 5000, "Balsamiq Sans", color_visitor );
+			showText( "Let's go inside. You're going to love it.", 38000, 5000, "Balsamiq Sans", color_visitor );
+
+			showText( "You see a fresh new pet bed right next to a couch. With toys!", 42000, 5000, "Chewy", color_narrator );
+			showText( "I... This has to be a dream... I want to be here fur-ever.", 47000, 5000, "Chewy", color_player );
+			showText( "Welcome to your new home, little one!", 50000, 5000, "Balsamiq Sans", color_visitor );
+			showText( "You can stay here, right next to me...", 55000, 8000, "Balsamiq Sans", color_visitor );
+
+			showText( "Thank you fur playing our game.", 65000, 10000, "Chewy", color_narrator );
+			showText( "Many pets around the world are looking for love!", 70000, 10000, "Chewy", color_visitor );
+			showText( "Please check your local shelter and consider adopting a pet <3", 74000, 10000, "Chewy", color_visitor );
+			showText( "With love,", 78000, 10000, "Chewy", color_narrator );
+			showText( "Instafluff, Patrik, and Maaya", 80000, 10000, "Chewy", color_player );
+
+			showText( "Homepick, A Pet Text Adventure. Ludum Dare 47", 91000, 10000, "Chewy", color_narrator );
+		}
+
+		async function doAction( index ) {
+			hideButtons();
+			if( titleTimer ) {
+				// Start the game!
+				clearInterval( titleTimer );
+				textFadeOuts.push( titleLabel );
+				titleTimer = null;
+				setupNewDay();
+				return;
+			}
+			let actions = getActions( player );
+			let descriptions = actions[ actionOptions[ index ] ].desc;
+			showText( descriptions[ getRandomInt( descriptions.length ) ], 0, 5000, "Chewy", color_narrator );
+			player = applyAction( player, actionOptions[ index ] );
+			let score = statsScore( visitor, player.stats );
+			let prevTotal = totalScore;
+			totalScore += score;
+			const goalTotalScore = numRounds * 4;
+			let narrations = ReactionsNarration[ traits[ 0 ] ];
+			let reactions = Reactions[ traits[ 0 ] ];
+			console.log( round, numRounds, previousScore, score, reactions );
+			await wait( 1000 );
+			if( round >= numRounds ) {
+				// Final round!
+				if( totalScore >= goalTotalScore ) {
+					// Adopted! YAY!
+					playWinMusic();
+					showText( narrations.adopted[ getRandomInt( narrations.adopted.length ) ], 0, 5000, "Chewy", color_narrator );
+					showText( reactions.adopted[ getRandomInt( reactions.adopted.length ) ], 2000, 5000, "Balsamiq Sans", color_visitor );
+					showText( Celebration[ getRandomInt( Celebration.length ) ], 6000, 5000, "Chewy", color_player );
+					await wait( 11000 );
+					doCelebration();
+				}
+				else {
+					// Not adopted... next visitor!
+					// sfx_denied.play();
+					walkOut();
+					showText( narrations.denied[ getRandomInt( narrations.denied.length ) ], 0, 5000, "Chewy", color_narrator );
+					showText( reactions.denied[ getRandomInt( reactions.denied.length ) ], 2000, 5000, "Balsamiq Sans", color_visitor );
+					showText( Encouragement[ getRandomInt( Encouragement.length ) ], 7000, 5000, "Chewy", color_player );
+					await wait( 12000 );
+					setupNewDay();
+				}
+			}
+			else {
+				if( score < previousScore ) {
+					// sfx_disappoint.play();
+					bark();
+					showText( narrations.disappointed[ getRandomInt( narrations.disappointed.length ) ], 0, 5000, "Chewy", color_narrator );
+					showText( reactions.disappointed[ getRandomInt( reactions.disappointed.length ) ], 2000, 5000, "Balsamiq Sans", color_visitor );
+				}
+				else if( score === previousScore ) {
+					// sfx_neutral.play();
+					bark();
+					showText( narrations.neutral[ getRandomInt( narrations.neutral.length ) ], 0, 5000, "Chewy", color_narrator );
+					showText( reactions.neutral[ getRandomInt( reactions.neutral.length ) ], 2000, 5000, "Balsamiq Sans", color_visitor );
+				}
+				else if( round < 3 || score < previousScore + 1 ) {
+					// sfx_interested.play();
+					bark();
+					showText( narrations.interested[ getRandomInt( narrations.interested.length ) ], 0, 5000, "Chewy", color_narrator );
+					showText( reactions.interested[ getRandomInt( reactions.interested.length ) ], 2000, 5000, "Balsamiq Sans", color_visitor );
+				}
+				else {
+					// sfx_veryinterested.play();
+					bark();
+					showText( narrations.veryinterested[ getRandomInt( narrations.veryinterested.length ) ], 0, 5000, "Chewy", color_narrator );
+					showText( reactions.veryinterested[ getRandomInt( reactions.veryinterested.length ) ], 2000, 5000, "Balsamiq Sans", color_visitor );
+				}
+				await wait( 5000 );
+				setupRound();
+			}
+			console.log( "STATS:", score );
+			previousScore = score;
+		}
+
+		function setupRound() {
+			round++;
+			let actions = getActions( player );
+			console.log( actions );
+			let actionNames = Object.keys( actions );
+			shuffleArray( actionNames );
+			for( let i = 0; i < 3; i++ ) {
+				document.getElementById( `option_${i+1}` ).innerText = actions[ actionNames[ i ] ].name;
+			}
+			actionOptions = actionNames.slice( 0, 3 );
+			showButtons();
+		}
+		</script>
+	</body>
+</html>
