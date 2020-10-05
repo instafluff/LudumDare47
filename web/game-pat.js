@@ -11,6 +11,7 @@ var woosh = new Howl({
   volume: 0.3
 });
 var barkLoudness = 0.3;
+var walkLoudness = 0.6;
 var bark1 = new Howl({
 	  src: ['web/assets/barks/bark1.mp3'],
 	  volume: barkLoudness
@@ -36,6 +37,16 @@ var bark1 = new Howl({
 	  volume: barkLoudness
 	});
 var barks = [bark1, bark2, bark3, bark4, bark5, bark6];
+
+var walk_in = new Howl({
+	  src: ['web/assets/walk/walk-in2.mp3'],
+	  volume: walkLoudness
+	}),
+	walk_out = new Howl({
+	  src: ['web/assets/walk/walk-out2.mp3'],
+	  volume: walkLoudness
+	});
+
 
 var volumeSetting = 1;
 document.getElementById( "volume-control" ).addEventListener( "click", ( event ) => {
@@ -86,4 +97,12 @@ function bark( pan ) {
 	currentBark.stereo(panorama);
 	currentBark.volume(barkLoudness*Math.random() + 0.1);
 	barks[Math.floor(Math.random()*barks.length)].play();
+}
+
+// WALK SOUNDS
+function walkIn() {
+	walk_in.play();
+}
+function walkOut() {
+	walk_out.play();
 }

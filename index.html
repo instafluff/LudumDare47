@@ -319,6 +319,7 @@
 			// console.log( `${traits[ 0 ]}_${traits[ 1 ]}` );
 
 			let intros = Introductions[ `${traits[ 0 ]}_${traits[ 1 ]}` ];
+			walkIn();
 			showText( intros[ getRandomInt( intros.length ) ], 0, 15000, "Chewy", color_narrator );
 			showText( getRandomVisitorDescription(), 5000, 12000, "Chewy", color_player );
 			showText( getRandomVisitorDescription(), 10000, 9000, "Chewy", color_player );
@@ -385,6 +386,7 @@
 				else {
 					// Not adopted... next visitor!
 					// sfx_denied.play();
+					walkOut();
 					showText( narrations.denied[ getRandomInt( narrations.denied.length ) ], 0, 5000, "Chewy", color_narrator );
 					showText( reactions.denied[ getRandomInt( reactions.denied.length ) ], 2000, 5000, "Balsamiq Sans", color_visitor );
 					showText( Encouragement[ getRandomInt( Encouragement.length ) ], 7000, 5000, "Chewy", color_player );
