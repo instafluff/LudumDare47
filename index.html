@@ -173,6 +173,8 @@
 		let textCounter = 0;
 		let textYRefCount = 0;
 		let textYOffset = 0;
+		let textFadeIns = [];
+		let textFadeOuts = [];
 		async function showText( text, delay = 0, time = 5000, font = "Chewy", color = "#000000", anim = "fade" ) {
 			await wait( delay );
 			textCounter++;
@@ -190,15 +192,7 @@
 			case "fade":
 				{
 					element.alpha = 0;
-					let fadeIn = setInterval( () => {
-						if( element.alpha < 1 ) {
-							element.alpha += 0.1;
-						}
-						else {
-							clearInterval( fadeIn );
-							fadeIn = null;
-						}
-					}, 100 );
+					textFadeIns.push( element );
 				}
 				break;
 			default:
@@ -226,16 +220,10 @@
 				switch( anim ) {
 				case "fade":
 					{
-						let fadeOut = setInterval( () => {
-							if( element.alpha > 0 ) {
-								element.alpha -= 0.1;
-							}
-							else {
-								clearInterval( fadeOut );
-								fadeOut = null;
-								Unicorn.RemoveText( label );
-							}
-						}, 100 );
+						textFadeOuts.push( element );
+						setTimeout( () => {
+							Unicorn.RemoveText( label );
+						}, 1500 );
 					}
 					break;
 				default:
@@ -291,6 +279,17 @@
 		}
 
 		function Update( timestamp, timeDiffInMs ) {
+			const timeStep = timeDiffInMs / 1000;
+			for( let i = 0; i < textFadeIns.length; i++ ) {
+				if( textFadeIns[ i ].alpha < 1 ) {
+					textFadeIns[ i ].alpha += timeStep;
+				}
+			}
+			for( let i = 0; i < textFadeOuts.length; i++ ) {
+				if( textFadeIns[ i ].alpha > 0 ) {
+					textFadeIns[ i ].alpha -= timeStep;
+				}
+			}
 		}
 
 		function OnChatCommand( user, command, message, flags ) {
