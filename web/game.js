@@ -439,8 +439,12 @@ function statsScore( A, B ) {
 	}, 0 );
 }
 
-function getRandomInt( num ) {
-	return Math.floor( num * Math.random() );
+function getRandomInt( num, butNot = -1 ) {
+	let n = Math.floor( num * Math.random() );
+	while( num > 1 && n === butNot ) {
+		n = Math.floor( num * Math.random() );
+	}
+	return n;
 }
 
 function shuffleArray( array ) {
