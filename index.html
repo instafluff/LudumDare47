@@ -14,9 +14,16 @@
 		<button id="option_3" onclick="doAction(2)">Option 3</button>
 		<script>
 		const params = new URLSearchParams( location.search );
+		const fonts = [
+			"Permanent Marker", // announcements!
+			"Balsamiq Sans", // pet
+			"Grandstander", // happy and cute, child
+			"Neucha", // shy, quotes
+			"Chewy", // fluffy pet!
+		];
 		window.WebFontConfig = {
 			google: {
-				families: [ 'Luckiest Guy', 'Geo', "Balsamiq Sans" ],
+				families: fonts,
 			},
 			active() {
 				CreateGame();
@@ -210,7 +217,7 @@
 
 		async function setupNewDay() {
 			previousScore = 0; totalScore = 0; round = 0;
-			showText( NewDay[ getRandomInt( NewDay.length ) ] );
+			showText( NewDay[ getRandomInt( NewDay.length ) ], 0, 5000 );
 			await wait( 5000 );
 			traits = createVisitor();
 			visitor_basestats = calculateVisitorStats( traits );
@@ -220,10 +227,10 @@
 			// console.log( `${traits[ 0 ]}_${traits[ 1 ]}` );
 
 			let intros = Introductions[ `${traits[ 0 ]}_${traits[ 1 ]}` ];
-			showText( intros[ getRandomInt( intros.length ) ] );
-			showText( getRandomVisitorDescription(), 5000 );
-			showText( getRandomVisitorDescription(), 10000 );
-			showText( getRandomVisitorDescription(), 15000 );
+			showText( intros[ getRandomInt( intros.length ) ], 0, 5000 );
+			showText( getRandomVisitorDescription(), 5000, 5000 );
+			showText( getRandomVisitorDescription(), 10000, 5000 );
+			showText( getRandomVisitorDescription(), 15000, 5000 );
 			setupRound();
 		}
 
@@ -268,34 +275,34 @@
 				if( totalScore >= goalTotalScore ) {
 					// Adopted! YAY!
 					playWinMusic();
-					showText( reactions.adopted[ getRandomInt( reactions.adopted.length ) ] );
-					showText( Celebration[ getRandomInt( Celebration.length ) ], 5000 );
+					showText( reactions.adopted[ getRandomInt( reactions.adopted.length ) ], 0, 5000, "Grandstander" );
+					showText( Celebration[ getRandomInt( Celebration.length ) ], 5000, 5000 );
 				}
 				else {
 					// Not adopted... next visitor!
 					sfx_denied.play();
-					showText( reactions.denied[ getRandomInt( reactions.denied.length ) ] );
-					showText( Encouragement[ getRandomInt( Encouragement.length ) ], 5000 );
-					await wait( 5000 );
+					showText( reactions.denied[ getRandomInt( reactions.denied.length ) ], 0, 5000, "Grandstander" );
+					showText( Encouragement[ getRandomInt( Encouragement.length ) ], 5000, 5000 );
+					await wait( 10000 );
 					setupNewDay();
 				}
 			}
 			else {
 				if( score < previousScore ) {
 					sfx_disappoint.play();
-					showText( reactions.disappointed[ getRandomInt( reactions.disappointed.length ) ] );
+					showText( reactions.disappointed[ getRandomInt( reactions.disappointed.length ) ], 0, 5000, "Grandstander" );
 				}
 				else if( score === previousScore ) {
 					sfx_neutral.play();
-					showText( reactions.neutral[ getRandomInt( reactions.neutral.length ) ] );
+					showText( reactions.neutral[ getRandomInt( reactions.neutral.length ) ], 0, 5000, "Grandstander" );
 				}
 				else if( round < 3 || score < previousScore + 1 ) {
 					sfx_interested.play();
-					showText( reactions.interested[ getRandomInt( reactions.interested.length ) ] );
+					showText( reactions.interested[ getRandomInt( reactions.interested.length ) ], 0, 5000, "Grandstander" );
 				}
 				else {
 					sfx_veryinterested.play();
-					showText( reactions.veryinterested[ getRandomInt( reactions.veryinterested.length ) ] );
+					showText( reactions.veryinterested[ getRandomInt( reactions.veryinterested.length ) ], 0, 5000, "Grandstander" );
 				}
 				setupRound();
 			}
