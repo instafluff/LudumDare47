@@ -64,7 +64,7 @@ const Descriptions = {
         "vampire": [ "Did she yawn? Maybe it's still too early in the day for her." ],
     },
     "neither": {
-        "child": [ "They tug at a big human's clothes and says, \"Dad, look at this one!\"" ],
+        "child": [ "They tug at a big human's clothes and say, \"Dad, look at this one!\"" ],
         "older": [ "They walk around with a cane" ],
         "family": [ "They look around the animal shelter together." ],
         "nice": [ "They ask politely, \"I'm looking for a good companion to tag along with me. Who's your nicest animal buddy here?\"" ],

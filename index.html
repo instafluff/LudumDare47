@@ -2,15 +2,58 @@
 	<head>
 		<title>Ludum Dare 47 Title Pending</title>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.0/howler.min.js" integrity="sha512-ALoawPS0JxHQ+8dGL7htZIlVNRaE/SN9gHD4G8pJJTi9H4BQ/3PjdvhggSGR34g00mvTPFkxQuveQUsJA5664Q==" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/pinkfluffyunicorn/dist/pinkfluffyunicorn.min.js"></script>
 		<script src="web/game.js"></script>
 		<script src="web/sentences.js"></script>
 	</head>
 	<body>
+		<div id="unicorn-display"></div>
 		<h1 id="text"></h1>
 		<button id="option_1" onclick="doAction(0)">Option 1</button>
 		<button id="option_2" onclick="doAction(1)">Option 2</button>
 		<button id="option_3" onclick="doAction(2)">Option 3</button>
 		<script>
+		const params = new URLSearchParams( location.search );
+		window.WebFontConfig = {
+			google: {
+				families: [ 'Luckiest Guy', 'Geo', "Balsamiq Sans" ],
+			},
+			active() {
+				CreateGame();
+			},
+		};
+
+		/* eslint-disable */
+		// include the web-font loader script
+		(function() {
+			const wf = document.createElement('script');
+			wf.src = `${document.location.protocol === 'https:' ? 'https' : 'http'
+			}://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js`;
+			wf.type = 'text/javascript';
+			wf.async = 'true';
+			const s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(wf, s);
+		}());
+		/* eslint-enabled */
+
+		function CreateGame() {
+			Unicorn.Create( "unicorn-display", {
+				width: 1280,
+				height: 720,
+				background: params.get( "overlay" ) ? "transparent" : 0x777777,
+				// background: "transparent",
+				init: Init,
+				update: Update,
+				channel: params.get( "channel" ),
+				onCommand: OnChatCommand,
+				onChat: OnChatMessage,
+				// screenWalls: false, // Default: true
+				// wallBottom: true,
+				gravity: { x: 0, y: 0 },
+				// gravity: { x: 0, y: 2 } // Default: { x: 0, y: 1 }
+			});
+		}
+
 		var t1 = new Date().getTime();
 		let sfx_adopted = new Howl({
 			src: [ `web/assets/adopted.mp3` ],
@@ -73,9 +116,6 @@
 		let beatBars = [2,14,26,36,48];
 		let trackOffset = beat*2;
 		music.play();
-		setTimeout( () => {
-			playWinMusic();
-		}, 60000 );
 		function playWinMusic() {
 			let diff = new Date().getTime() - t1;
 			  let beats = Math.round((diff - trackOffset)/beat);
@@ -88,29 +128,52 @@
 			        break;
 			      }
 			    }
-			    console.log(currentBeatBar);
+			    // console.log(currentBeatBar);
 			    waitTime = Math.round((currentBeatBar-beats)*beat);
 
 			  } else if (beats < 388) {
 			  	beats = Math.round((diff - 50*beat)/beat);
-			    console.log(beats);
+			    // console.log(beats);
 			  	waitTime = Math.round((((beats - (beats % 8))/8 + 1)*8-beats) * beat);
 			  } else {
 			  	beats = Math.round((diff - 380*beat)/beat);
-			    console.log(beats);
+			    // console.log(beats);
 			  	waitTime = Math.round((((beats - (beats % 8))/8 + 1)*8-beats) * beat);
 			  }
 
-			console.log( "Waiting for " + waitTime + " miliseconds" );
+			// console.log( "Waiting for " + waitTime + " miliseconds" );
 			setTimeout( () => {
-				console.log( "NOW!" );
+				// console.log( "NOW!" );
 				// music.stop();
 				sfx_adopted.play();
 			}, waitTime );
 		}
-		function showText( text ) {
-			document.getElementById( "text" ).innerText = text;
+
+		let textCounter = 0;
+		async function showText( text, delay = 0, time = 5000, font = "Balsamiq Sans", anim = "" ) {
+			// document.getElementById( "text" ).innerText = text;
+			await wait( delay );
+			textCounter++;
+			let label = "text_" + textCounter;
+			let xPos = getRandomInt( 1280 - 80 ) + 40;
+			let yPos = getRandomInt( 720 - 80 ) + 40;
+			let element = Unicorn.AddText( label, text, xPos, yPos, {
+				fontFamily: font,
+				fontSize: 36,
+				fontWeight: "bold",
+				fill: "#000000"
+			} );
+			element.anchor.set( 0.5 );
+			console.log( element );
+			xPos = getRandomInt( 1280 - element.width - 80 ) + 40 + element.width / 2;
+			yPos = getRandomInt( 720 - element.height - 80 ) + 40 + element.height / 2;
+			element.x = xPos;
+			element.y = yPos;
+			setTimeout( () => {
+				Unicorn.RemoveText( label );
+			}, time );
 		}
+
 		let player = {
 			"type": "dog",
 			"stats": {
@@ -130,37 +193,38 @@
 		let visitor_basestats;
 		let visitor;
 
-		// TODO: randomize player stats
+		function Init() {
+			// TODO: randomize player stats
 
-		setupNewDay();
+			setupNewDay();
+		}
 
-		function setupNewDay() {
+		function Update( timestamp, timeDiffInMs ) {
+		}
+
+		function OnChatCommand( user, command, message, flags ) {
+		}
+
+		function OnChatMessage( user, message, flags, self ) {
+		}
+
+		async function setupNewDay() {
 			previousScore = 0; totalScore = 0; round = 0;
 			showText( NewDay[ getRandomInt( NewDay.length ) ] );
-			setTimeout( () => {
-				traits = createVisitor();
-				visitor_basestats = calculateVisitorStats( traits );
-				console.log( traits, visitor_basestats );
-				console.log( "STATS:", statsScore( visitor_basestats, player.stats ) );
-				visitor = Object.assign( {}, visitor_basestats );
-				console.log( `${traits[ 0 ]}_${traits[ 1 ]}` );
+			await wait( 5000 );
+			traits = createVisitor();
+			visitor_basestats = calculateVisitorStats( traits );
+			// console.log( traits, visitor_basestats );
+			// console.log( "STATS:", statsScore( visitor_basestats, player.stats ) );
+			visitor = Object.assign( {}, visitor_basestats );
+			// console.log( `${traits[ 0 ]}_${traits[ 1 ]}` );
 
-				let intros = Introductions[ `${traits[ 0 ]}_${traits[ 1 ]}` ];
-				showText( intros[ getRandomInt( intros.length ) ] );
-				setTimeout( () => {
-					let desc = getRandomVisitorDescription();
-					showText( desc );
-				}, 5000 );
-				setTimeout( () => {
-					let desc = getRandomVisitorDescription();
-					showText( desc );
-				}, 10000 );
-				setTimeout( () => {
-					let desc = getRandomVisitorDescription();
-					showText( desc );
-				}, 15000 );
-				setupRound();
-			}, 5000 );
+			let intros = Introductions[ `${traits[ 0 ]}_${traits[ 1 ]}` ];
+			showText( intros[ getRandomInt( intros.length ) ] );
+			showText( getRandomVisitorDescription(), 5000 );
+			showText( getRandomVisitorDescription(), 10000 );
+			showText( getRandomVisitorDescription(), 15000 );
+			setupRound();
 		}
 
 		//
@@ -187,7 +251,10 @@
 			return descriptions[ getRandomInt( descriptions.length ) ];
 		}
 
-		function doAction( index ) {
+		async function doAction( index ) {
+			let actions = getActions( player );
+			let descriptions = actions[ actionOptions[ index ] ].desc;
+			showText( descriptions[ getRandomInt( descriptions.length ) ] );
 			player = applyAction( player, actionOptions[ index ] );
 			let score = statsScore( visitor, player.stats );
 			let prevTotal = totalScore;
@@ -195,26 +262,22 @@
 			const goalTotalScore = numRounds * 4;
 			let reactions = Reactions[ traits[ 0 ] ];
 			console.log( round, numRounds, previousScore, score, reactions );
+			await wait( 3000 );
 			if( round >= numRounds ) {
 				// Final round!
 				if( totalScore >= goalTotalScore ) {
 					// Adopted! YAY!
 					playWinMusic();
 					showText( reactions.adopted[ getRandomInt( reactions.adopted.length ) ] );
-					setTimeout( () => {
-						showText( Celebration[ getRandomInt( Celebration.length ) ] );
-					}, 5000 );
+					showText( Celebration[ getRandomInt( Celebration.length ) ], 5000 );
 				}
 				else {
 					// Not adopted... next visitor!
 					sfx_denied.play();
 					showText( reactions.denied[ getRandomInt( reactions.denied.length ) ] );
-					setTimeout( () => {
-						showText( Encouragement[ getRandomInt( Encouragement.length ) ] );
-						setTimeout( () => {
-							setupNewDay();
-						}, 3000 );
-					}, 5000 );
+					showText( Encouragement[ getRandomInt( Encouragement.length ) ], 5000 );
+					await wait( 5000 );
+					setupNewDay();
 				}
 			}
 			else {
