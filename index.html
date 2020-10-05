@@ -267,42 +267,49 @@
 			let prevTotal = totalScore;
 			totalScore += score;
 			const goalTotalScore = numRounds * 4;
+			let narrations = ReactionsNarration[ traits[ 0 ] ];
 			let reactions = Reactions[ traits[ 0 ] ];
 			console.log( round, numRounds, previousScore, score, reactions );
-			await wait( 3000 );
+			await wait( 2000 );
 			if( round >= numRounds ) {
 				// Final round!
 				if( totalScore >= goalTotalScore ) {
 					// Adopted! YAY!
 					playWinMusic();
-					showText( reactions.adopted[ getRandomInt( reactions.adopted.length ) ], 0, 5000, "Grandstander" );
-					showText( Celebration[ getRandomInt( Celebration.length ) ], 5000, 5000 );
+					showText( narrations.adopted[ getRandomInt( narrations.adopted.length ) ], 0, 5000 );
+					showText( reactions.adopted[ getRandomInt( reactions.adopted.length ) ], 2000, 5000, "Grandstander" );
+					showText( Celebration[ getRandomInt( Celebration.length ) ], 6000, 5000 );
 				}
 				else {
 					// Not adopted... next visitor!
 					sfx_denied.play();
-					showText( reactions.denied[ getRandomInt( reactions.denied.length ) ], 0, 5000, "Grandstander" );
-					showText( Encouragement[ getRandomInt( Encouragement.length ) ], 5000, 5000 );
-					await wait( 10000 );
+					showText( narrations.denied[ getRandomInt( narrations.denied.length ) ], 0, 5000 );
+					showText( reactions.denied[ getRandomInt( reactions.denied.length ) ], 2000, 5000, "Grandstander" );
+					showText( Encouragement[ getRandomInt( Encouragement.length ) ], 7000, 5000 );
+					await wait( 12000 );
 					setupNewDay();
 				}
 			}
 			else {
 				if( score < previousScore ) {
 					sfx_disappoint.play();
-					showText( reactions.disappointed[ getRandomInt( reactions.disappointed.length ) ], 0, 5000, "Grandstander" );
+					showText( narrations.disappointed[ getRandomInt( narrations.disappointed.length ) ], 0, 5000 );
+					showText( reactions.disappointed[ getRandomInt( reactions.disappointed.length ) ], 2000, 5000, "Grandstander" );
 				}
 				else if( score === previousScore ) {
 					sfx_neutral.play();
-					showText( reactions.neutral[ getRandomInt( reactions.neutral.length ) ], 0, 5000, "Grandstander" );
+					showText( narrations.neutral[ getRandomInt( narrations.neutral.length ) ], 0, 5000 );
+					showText( reactions.neutral[ getRandomInt( reactions.neutral.length ) ], 2000, 5000, "Grandstander" );
 				}
 				else if( round < 3 || score < previousScore + 1 ) {
 					sfx_interested.play();
-					showText( reactions.interested[ getRandomInt( reactions.interested.length ) ], 0, 5000, "Grandstander" );
+					showText( narrations.interested[ getRandomInt( narrations.interested.length ) ], 0, 5000 );
+					showText( reactions.interested[ getRandomInt( reactions.interested.length ) ], 2000, 5000, "Grandstander" );
 				}
 				else {
 					sfx_veryinterested.play();
-					showText( reactions.veryinterested[ getRandomInt( reactions.veryinterested.length ) ], 0, 5000, "Grandstander" );
+					showText( narrations.veryinterested[ getRandomInt( narrations.veryinterested.length ) ], 0, 5000 );
+					showText( reactions.veryinterested[ getRandomInt( reactions.veryinterested.length ) ], 2000, 5000, "Grandstander" );
 				}
 				setupRound();
 			}

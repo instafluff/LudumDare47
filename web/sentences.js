@@ -90,31 +90,57 @@ const Descriptions = {
     },
 };
 
-// --reactions--
-const Reactions = {
+const ReactionsNarration = {
     "male": {
-		"denied": [ "He walked away. \"I don't think this one is quite what I'm looking for.\"" ],
-		"disappointed": [ "\"Oh... that was strange...\", he says." ],
-		"neutral": [ "He's just watching me." ],
-		"interested": [ "He seems to be interested in me." ],
-		"veryinterested": [ "\"Oooh... I like you, little buddy.\", he says." ],
-		"adopted": [ "He reaches over and picks you up. \"You're coming home with me! I'll take good care of you.\"" ],
+		"denied": [ "He walked away..." ],
+		"disappointed": [ "He looks a little disappointed." ],
+		"neutral": [ "He watches you cautiously." ],
+		"interested": [ "He takes a closer look at you." ],
+		"veryinterested": [ "It seems you have his full attention at the moment." ],
+		"adopted": [ "He reaches over and picks you up." ],
     },
     "female": {
-		"denied": [ "She walked away. \"I don't think this one is quite what I'm looking for.\"" ],
-		"disappointed": [ "\"Oh... that was strange...\", she says." ],
-		"neutral": [ "She's just watching me." ],
-		"interested": [ "She seems to be interested in me." ],
-		"veryinterested": [ "\"Oooh... I like you, little buddy.\", she says." ],
-		"adopted": [ "She reaches over and picks you up. \"You're coming home with me! I'll take good care of you.\"" ],
+		"denied": [ "She walked away..." ],
+		"disappointed": [ "She looks a little disappointed." ],
+		"neutral": [ "She watches you cautiously." ],
+		"interested": [ "She takes a closer look at you." ],
+		"veryinterested": [ "It seems you have her full attention at the moment." ],
+		"adopted": [ "She reaches over and picks you up." ],
     },
     "neither": {
-		"denied": [ "They walked away. \"I don't think this one is quite what I'm looking for.\"" ],
-		"disappointed": [ "\"Oh... that was strange...\", they say." ],
-		"neutral": [ "They're just watching me." ],
-		"interested": [ "They seem to be interested in me." ],
+		"denied": [ "They walked away..." ],
+		"disappointed": [ "They look a little disappointed." ],
+		"neutral": [ "They watch you cautiously." ],
+		"interested": [ "They take a closer look at you." ],
+		"veryinterested": [ "It seems you have their full attention at the moment." ],
+		"adopted": [ "They reach over and pick you up." ],
+    },
+};
+
+const Reactions = {
+    "male": {
+		"denied": [ "\"I don't think this one is quite what I'm looking for.\"" ],
+		"disappointed": [ "\"Oh... that was strange...\"" ],
+		"neutral": [ "\"Hmm.\"" ],
+		"interested": [ "\"Aww, you're an interesting one.\"" ],
+		"veryinterested": [ "\"Oooh... I like you, little buddy.\"" ],
+		"adopted": [ "\"You're coming home with me! I'll take good care of you.\"" ],
+    },
+    "female": {
+		"denied": [ "\"I don't think this one is quite what I'm looking for.\"" ],
+		"disappointed": [ "\"Oh... that was strange...\"" ],
+		"neutral": [ "\"Hmm.\"" ],
+		"interested": [ "\"Aww, you're an interesting one.\"" ],
+		"veryinterested": [ "\"Oooh... I like you, little buddy.\"" ],
+		"adopted": [ "\"You're coming home with me! I'll take good care of you.\"" ],
+    },
+    "neither": {
+		"denied": [ "\"I don't think this one is quite what I'm looking for.\"" ],
+		"disappointed": [ "\"Oh... that was strange...\"" ],
+		"neutral": [ "\"Hmm.\"" ],
+		"interested": [ "\"Aww, you're an interesting one.\"" ],
 		"veryinterested": [ "\"Oooh... I like you, little buddy.\", they say." ],
-		"adopted": [ "They reach over and pick you up. \"You're coming home with me! I'll take good care of you.\"" ],
+		"adopted": [ "\"You're coming home with me! I'll take good care of you.\"" ],
     },
 };
 
