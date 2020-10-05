@@ -389,7 +389,7 @@ const Actions = {
 				"happy": 0,
 				"confident": -1,
 				"relaxed": -1,
-				"playful": 1,
+				"playful": 2,
 			}
 		},
 		"whine": {
@@ -405,16 +405,110 @@ const Actions = {
 				"playful": 0,
 			}
 		},
-		// "cry": {},
-		// "pee": {},
-		// "poop": {},
-		// "walkbacknforth": {
-		// 	"desc": "walk back and forth"
-		// },
-		// "lickpaws": {},
-		// "chasetail": {},
-		// "looksad": {},
-		// "standup": {},
+		"cry": {
+			"name": "Cry",
+			"desc": [ "You start to cry" ],
+			"effect": {
+				"cute": 2,
+				"energetic": 0,
+				"fluffy": 1,
+				"happy": -1,
+				"confident": -1,
+				"relaxed": 0,
+				"playful": -1,
+			}
+		},
+		"pee": {
+			"name": "Take a pee",
+			"desc": [ "You start to pee and everyone around starts to look at you" ],
+			"effect": {
+				"cute": -1,
+				"energetic": 0,
+				"fluffy": -1,
+				"happy": 1,
+				"confident": 0,
+				"relaxed": 1,
+				"playful": 0,
+			}
+		},
+		"poop": {
+			"name": "Take a poo",
+			"desc": [ "You went to do your business in a corner" ],
+			"effect": {
+				"cute": -1,
+				"energetic": 0,
+				"fluffy": -1,
+				"happy": 1,
+				"confident": 0,
+				"relaxed": 1,
+				"playful": 0,
+			}
+		},
+		"walkbacknforth": {
+			"name": "Walk back and forth",
+			"desc": [ "You started to walk eagerly back and forth" ],
+			"effect": {
+				"cute": 0,
+				"energetic": 2,
+				"fluffy": -1,
+				"happy": 1,
+				"confident": 0,
+				"relaxed": -2,
+				"playful": 0,
+			}
+		},
+		"lickpaws": {
+			"name": "Lick your paws",
+			"desc": [ "You started to lick your little paws slowly" ],
+			"effect": {
+				"cute": 1,
+				"energetic": -1,
+				"fluffy": 1,
+				"happy": 0,
+				"confident": 0,
+				"relaxed": 1,
+				"playful": -1,
+			}
+		},
+		"chasetail": {
+			"name": "Chase your tail",
+			"desc": [ "You chase your tail in circles" ],
+			"effect": {
+				"cute": 0,
+				"energetic": 1,
+				"fluffy": 0,
+				"happy": 0,
+				"confident": -1,
+				"relaxed": -1,
+				"playful": 1,
+			}
+		},
+		"looksad": {
+			"name": "Look sad",
+			"desc": [ "You put on a sad look" ],
+			"effect": {
+				"cute": 2,
+				"energetic": 0,
+				"fluffy": 0,
+				"happy": -1,
+				"confident": -1,
+				"relaxed": 0,
+				"playful": 0,
+			}
+		},
+		"standup": {
+			"name": "Stand up",
+			"desc": [ "You stood up and showed your excitement" ],
+			"effect": {
+				"cute": 0,
+				"energetic": 1,
+				"fluffy": 0,
+				"happy": 0,
+				"confident": 1,
+				"relaxed": -1,
+				"playful": -1,
+			}
+		}
 	}
 }
 
