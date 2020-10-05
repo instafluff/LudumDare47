@@ -1,3 +1,5 @@
+const Title = "Homepick, A Pet Text Adventure";
+const TitleTexts = [ "This game is so fluffy...", "Instafluff and PatrikHerman made this game!", "I hope I get adopted.", "I wonder if today's the day...", "Who will come see us today?", "Can I convince someone to pick me?", "I'll do my best!", "I can't wait to find a fur-ever home.", "It must be nice having a warm cozy home." ];
 const NewDay = [ "It's a fresh new day! The animal shelter is opening up for visitors" ];
 
 const Introductions = {

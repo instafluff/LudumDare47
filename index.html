@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Ludum Dare 47 Title Pending</title>
+		<title>Homepick, A Pet Text Adventure - Ludum Dare 47</title>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.0/howler.min.js" integrity="sha512-ALoawPS0JxHQ+8dGL7htZIlVNRaE/SN9gHD4G8pJJTi9H4BQ/3PjdvhggSGR34g00mvTPFkxQuveQUsJA5664Q==" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/pinkfluffyunicorn/dist/pinkfluffyunicorn.min.js"></script>
 		<script src="web/game.js"></script>
@@ -8,9 +8,9 @@
 	</head>
 	<body>
 		<div id="unicorn-display"></div>
-		<button id="option_1" onclick="doAction(0)">Option 1</button>
-		<button id="option_2" onclick="doAction(1)">Option 2</button>
-		<button id="option_3" onclick="doAction(2)">Option 3</button>
+		<button id="option_1" onclick="doAction(0)">Click</button>
+		<button id="option_2" onclick="doAction(1)">To</button>
+		<button id="option_3" onclick="doAction(2)">Start</button>
 		<script>
 		const params = new URLSearchParams( location.search );
 		const fonts = [
@@ -158,7 +158,7 @@
 		let textCounter = 0;
 		let textYRefCount = 0;
 		let textYOffset = 0;
-		async function showText( text, delay = 0, time = 5000, font = "Balsamiq Sans", color = "#000000", anim = "" ) {
+		async function showText( text, delay = 0, time = 5000, font = "Balsamiq Sans", color = "#000000", anim = "fade" ) {
 			await wait( delay );
 			textCounter++;
 			let label = "text_" + textCounter;
@@ -171,6 +171,24 @@
 				fill: color
 			} );
 			element.anchor.set( 0.5 );
+			switch( anim ) {
+			case "fade":
+				{
+					element.alpha = 0;
+					let fadeIn = setInterval( () => {
+						if( element.alpha < 1 ) {
+							element.alpha += 0.1;
+						}
+						else {
+							clearInterval( fadeIn );
+							fadeIn = null;
+						}
+					}, 100 );
+				}
+				break;
+			default:
+				break;
+			}
 			// console.log( element );
 			xPos = getRandomInt( 1280 - element.width - 80 ) + 40 + element.width / 2;
 			yPos = getRandomInt( 720 - element.height - 80 ) + 40 + element.height / 2;
@@ -180,7 +198,7 @@
 			else {
 				textYOffset += 100;
 				if( textYOffset > 720 - element.height - 40 ) {
-					textYOffset -= 720 - element.height - 80;
+					textYOffset -= 720 - element.height - 120;
 				}
 				yPos = textYOffset;
 			}
@@ -190,8 +208,28 @@
 			element.y = yPos;
 			setTimeout( () => {
 				textYRefCount--;
-				Unicorn.RemoveText( label );
+				switch( anim ) {
+				case "fade":
+					{
+						let fadeOut = setInterval( () => {
+							if( element.alpha > 0 ) {
+								element.alpha -= 0.1;
+							}
+							else {
+								clearInterval( fadeOut );
+								fadeOut = null;
+								Unicorn.RemoveText( label );
+							}
+						}, 100 );
+					}
+					break;
+				default:
+					Unicorn.RemoveText( label );
+					break;
+				}
 			}, time );
+
+			return element;
 		}
 
 		const color_narrator = "#FAD02C";
@@ -215,11 +253,23 @@
 		let traits = null;
 		let visitor_basestats;
 		let visitor;
+		let titleLabel = "";
+		let titleTimer = null;
+		let lastTitleText = -1;
 
-		function Init() {
+		async function Init() {
 			// TODO: randomize player stats
 
-			setupNewDay();
+			// Start the title screen
+			titleLabel = await showText( Title, 0, 20000, "Balsamiq Sans", color_narrator );
+
+			titleTimer = setInterval( () => {
+				let titleText = getRandomInt( TitleTexts.length, lastTitleText );
+				showText( TitleTexts[ titleText ], 0, 6000, "Balsamiq Sans", color_player );
+				lastTitleText = titleText;
+			}, 5000 );
+
+			// setupNewDay();
 		}
 
 		function Update( timestamp, timeDiffInMs ) {
@@ -275,6 +325,13 @@
 		}
 
 		async function doAction( index ) {
+			if( titleTimer ) {
+				// Start the game!
+				clearInterval( titleTimer );
+				titleLabel.alpha = 0;
+				setupNewDay();
+				return;
+			}
 			let actions = getActions( player );
 			let descriptions = actions[ actionOptions[ index ] ].desc;
 			showText( descriptions[ getRandomInt( descriptions.length ) ], 0, 5000, "Balsamiq Sans", color_narrator );
