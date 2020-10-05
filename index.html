@@ -47,7 +47,7 @@
 			Unicorn.Create( "unicorn-display", {
 				width: 1280,
 				height: 720,
-				background: params.get( "overlay" ) ? "transparent" : 0x777777,
+				background: params.get( "overlay" ) ? "transparent" : 0x333652,
 				// background: "transparent",
 				init: Init,
 				update: Update,
@@ -157,7 +157,7 @@
 		}
 
 		let textCounter = 0;
-		async function showText( text, delay = 0, time = 5000, font = "Balsamiq Sans", anim = "" ) {
+		async function showText( text, delay = 0, time = 5000, font = "Balsamiq Sans", color = "#000000", anim = "" ) {
 			// document.getElementById( "text" ).innerText = text;
 			await wait( delay );
 			textCounter++;
@@ -168,7 +168,7 @@
 				fontFamily: font,
 				fontSize: 36,
 				fontWeight: "bold",
-				fill: "#000000"
+				fill: color
 			} );
 			element.anchor.set( 0.5 );
 			console.log( element );
@@ -181,6 +181,9 @@
 			}, time );
 		}
 
+		const color_narrator = "#FAD02C";
+		const color_player = "#90ADC6";
+		const color_visitor = "#E9EAEC";
 		let player = {
 			"type": "dog",
 			"stats": {
@@ -217,7 +220,7 @@
 
 		async function setupNewDay() {
 			previousScore = 0; totalScore = 0; round = 0;
-			showText( NewDay[ getRandomInt( NewDay.length ) ], 0, 5000 );
+			showText( NewDay[ getRandomInt( NewDay.length ) ], 0, 5000, "Balsamiq Sans", color_narrator );
 			await wait( 5000 );
 			traits = createVisitor();
 			visitor_basestats = calculateVisitorStats( traits );
@@ -227,10 +230,10 @@
 			// console.log( `${traits[ 0 ]}_${traits[ 1 ]}` );
 
 			let intros = Introductions[ `${traits[ 0 ]}_${traits[ 1 ]}` ];
-			showText( intros[ getRandomInt( intros.length ) ], 0, 5000 );
-			showText( getRandomVisitorDescription(), 5000, 5000 );
-			showText( getRandomVisitorDescription(), 10000, 5000 );
-			showText( getRandomVisitorDescription(), 15000, 5000 );
+			showText( intros[ getRandomInt( intros.length ) ], 0, 5000, "Balsamiq Sans", color_narrator );
+			showText( getRandomVisitorDescription(), 5000, 5000, "Balsamiq Sans", color_player );
+			showText( getRandomVisitorDescription(), 10000, 5000, "Balsamiq Sans", color_player );
+			showText( getRandomVisitorDescription(), 15000, 5000, "Balsamiq Sans", color_player );
 			setupRound();
 		}
 
@@ -261,7 +264,7 @@
 		async function doAction( index ) {
 			let actions = getActions( player );
 			let descriptions = actions[ actionOptions[ index ] ].desc;
-			showText( descriptions[ getRandomInt( descriptions.length ) ] );
+			showText( descriptions[ getRandomInt( descriptions.length ) ], 0, 5000, "Balsamiq Sans", color_narrator );
 			player = applyAction( player, actionOptions[ index ] );
 			let score = statsScore( visitor, player.stats );
 			let prevTotal = totalScore;
@@ -270,22 +273,22 @@
 			let narrations = ReactionsNarration[ traits[ 0 ] ];
 			let reactions = Reactions[ traits[ 0 ] ];
 			console.log( round, numRounds, previousScore, score, reactions );
-			await wait( 2000 );
+			await wait( 1000 );
 			if( round >= numRounds ) {
 				// Final round!
 				if( totalScore >= goalTotalScore ) {
 					// Adopted! YAY!
 					playWinMusic();
-					showText( narrations.adopted[ getRandomInt( narrations.adopted.length ) ], 0, 5000 );
-					showText( reactions.adopted[ getRandomInt( reactions.adopted.length ) ], 2000, 5000, "Grandstander" );
-					showText( Celebration[ getRandomInt( Celebration.length ) ], 6000, 5000 );
+					showText( narrations.adopted[ getRandomInt( narrations.adopted.length ) ], 0, 5000, "Balsamiq Sans", color_narrator );
+					showText( reactions.adopted[ getRandomInt( reactions.adopted.length ) ], 2000, 5000, "Grandstander", color_visitor );
+					showText( Celebration[ getRandomInt( Celebration.length ) ], 6000, 5000, "Balsamiq Sans", color_player );
 				}
 				else {
 					// Not adopted... next visitor!
 					sfx_denied.play();
-					showText( narrations.denied[ getRandomInt( narrations.denied.length ) ], 0, 5000 );
-					showText( reactions.denied[ getRandomInt( reactions.denied.length ) ], 2000, 5000, "Grandstander" );
-					showText( Encouragement[ getRandomInt( Encouragement.length ) ], 7000, 5000 );
+					showText( narrations.denied[ getRandomInt( narrations.denied.length ) ], 0, 5000, "Balsamiq Sans", color_narrator );
+					showText( reactions.denied[ getRandomInt( reactions.denied.length ) ], 2000, 5000, "Grandstander", color_visitor );
+					showText( Encouragement[ getRandomInt( Encouragement.length ) ], 7000, 5000, "Balsamiq Sans", color_player );
 					await wait( 12000 );
 					setupNewDay();
 				}
@@ -293,23 +296,23 @@
 			else {
 				if( score < previousScore ) {
 					sfx_disappoint.play();
-					showText( narrations.disappointed[ getRandomInt( narrations.disappointed.length ) ], 0, 5000 );
-					showText( reactions.disappointed[ getRandomInt( reactions.disappointed.length ) ], 2000, 5000, "Grandstander" );
+					showText( narrations.disappointed[ getRandomInt( narrations.disappointed.length ) ], 0, 5000, "Balsamiq Sans", color_narrator );
+					showText( reactions.disappointed[ getRandomInt( reactions.disappointed.length ) ], 2000, 5000, "Grandstander", color_visitor );
 				}
 				else if( score === previousScore ) {
 					sfx_neutral.play();
-					showText( narrations.neutral[ getRandomInt( narrations.neutral.length ) ], 0, 5000 );
-					showText( reactions.neutral[ getRandomInt( reactions.neutral.length ) ], 2000, 5000, "Grandstander" );
+					showText( narrations.neutral[ getRandomInt( narrations.neutral.length ) ], 0, 5000, "Balsamiq Sans", color_narrator );
+					showText( reactions.neutral[ getRandomInt( reactions.neutral.length ) ], 2000, 5000, "Grandstander", color_visitor );
 				}
 				else if( round < 3 || score < previousScore + 1 ) {
 					sfx_interested.play();
-					showText( narrations.interested[ getRandomInt( narrations.interested.length ) ], 0, 5000 );
-					showText( reactions.interested[ getRandomInt( reactions.interested.length ) ], 2000, 5000, "Grandstander" );
+					showText( narrations.interested[ getRandomInt( narrations.interested.length ) ], 0, 5000, "Balsamiq Sans", color_narrator );
+					showText( reactions.interested[ getRandomInt( reactions.interested.length ) ], 2000, 5000, "Grandstander", color_visitor );
 				}
 				else {
 					sfx_veryinterested.play();
-					showText( narrations.veryinterested[ getRandomInt( narrations.veryinterested.length ) ], 0, 5000 );
-					showText( reactions.veryinterested[ getRandomInt( reactions.veryinterested.length ) ], 2000, 5000, "Grandstander" );
+					showText( narrations.veryinterested[ getRandomInt( narrations.veryinterested.length ) ], 0, 5000, "Balsamiq Sans", color_narrator );
+					showText( reactions.veryinterested[ getRandomInt( reactions.veryinterested.length ) ], 2000, 5000, "Grandstander", color_visitor );
 				}
 				setupRound();
 			}

@@ -146,11 +146,12 @@ const Reactions = {
 
 const Encouragement = [
 	"It's okay. I'll try again tomorrow!",
-	"I don't think that was going to be a good home for me anyway.",
+	"I don't think that was going to be a good home for me anyway...",
 	"Next one's going to love me for sure!",
-	"I can't wait to meet more visitors!"
+	"I'll definitely impress the next one!",
+    "That was so close! I can't wait for tomorrow."
 ];
 
 const Celebration = [
-	"I'm going home! I can't believe it! I'm adopted!"
+	"I'm going home! I can't believe it! I'm adopted!!"
 ];
