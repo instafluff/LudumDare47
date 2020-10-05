@@ -1,0 +1,50 @@
+html, body { margin: 0; padding: 0; }
+body {
+	background: #ececec;
+}
+
+#volume-control {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	width: 35px;
+	height: 30px;
+	border: none;
+	/*background: #90ADC6;*/
+	background: #EBEE80;
+	cursor: pointer;
+}
+#volume-control:hover {
+	/*background: #A9C1D5;*/
+	background: #D2D56F;
+}
+
+#action-buttons-container {
+	position: absolute;
+	top: 606px;
+	width: 1280px;
+	height: 114px;
+	overflow: hidden;
+}
+#action-buttons {
+	text-align: center;
+	background: #242639;
+	padding: 20px 0;
+	position: relative;
+	top: 114px;
+}
+#action-buttons button {
+	background: #90ADC6;
+	border: none;
+	padding: 25px 50px;
+	margin-right: 10px;
+	font-family: Balsamiq Sans;
+	font-size: 20px;
+	color: #131313;
+	cursor: pointer;
+	transition: all 0.1s;
+	border-radius: 8px;
+}
+#action-buttons button:hover {
+	background: #eee;
+}
